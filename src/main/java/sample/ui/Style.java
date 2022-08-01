@@ -1,4 +1,4 @@
-package sample;
+package sample.ui;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -21,7 +21,7 @@ import javafx.util.Duration;
 
 import static java.lang.Math.random;
 
-public class Home extends Application {
+public class Style extends Application {
 
     public static void main(String[] args) {
         launch(args);
