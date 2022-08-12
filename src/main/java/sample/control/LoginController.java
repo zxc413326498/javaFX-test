@@ -6,8 +6,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
+import sample.app.Main;
 
-public class Controller {
+import static sample.util.DialogUtil.showDialog;
+import static sample.util.DialogUtil.showDialogMessage;
+
+public class LoginController {
 
     @FXML
     private TextField username;
@@ -20,6 +24,8 @@ public class Controller {
 
     private String usernameString;
     private String passwordString;
+
+    private Main main;
 
     @FXML
     public void initialize(){
@@ -35,5 +41,15 @@ public class Controller {
 
         loginmessage.setText("正在登录，请稍后");
         //正在登录中，进行登录验证和跳转操作
+        if(usernameString.equals("root")&&passwordString.equals("root")) {
+            main.initRootLayout();
+            main.showPersonOverview();
+        }else {
+            showDialogMessage("提示","警告！","账号或密码错误");
+        }
+    }
+
+    public void setMain(Main main) {
+        this.main=main;
     }
 }
