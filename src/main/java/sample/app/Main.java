@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -18,6 +19,7 @@ import sample.control.PersonOverviewController;
 import sample.model.Person;
 
 import java.io.IOException;
+import java.net.URL;
 
 public class Main extends Application {
 
@@ -57,7 +59,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
-        this.primaryStage.setTitle("AddressApp");
+
+        //加载项目图标
+        URL url=getClass().getClassLoader().getResource("logo.png");
+//        URL url=Main.class.getResource("../../logo.png");
+        primaryStage.getIcons().add(new Image(url.toExternalForm()));
 
         login();
 
@@ -69,12 +75,15 @@ public class Main extends Application {
      * Initializes the root layout.
      */
     public void initRootLayout() {
+//        primaryStage.getIcons().add(new Image("file:resources/logo.png"));
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("../../RootLayout.fxml"));
+            loader.setLocation(getClass().getClassLoader().getResource("RootLayout.fxml"));
+//            loader.setLocation(Main.class.getResource("../../RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
 
+            primaryStage.setTitle("AddressApp");
             // Show the scene containing the root layout.
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
@@ -91,7 +100,8 @@ public class Main extends Application {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("../../PersonOverview.fxml"));
+            loader.setLocation(getClass().getClassLoader().getResource("PersonOverview.fxml"));
+//            loader.setLocation(Main.class.getResource("../../PersonOverview.fxml"));
             AnchorPane personOverview = (AnchorPane) loader.load();
 
             // Set person overview into the center of root layout.
@@ -117,7 +127,8 @@ public class Main extends Application {
         try{
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader=new FXMLLoader();
-            loader.setLocation(Main.class.getResource("../../PersonEditDialog.fxml"));
+            loader.setLocation(getClass().getClassLoader().getResource("PersonEditDialog.fxml"));
+//            loader.setLocation(Main.class.getResource("../../PersonEditDialog.fxml"));
             AnchorPane pane=(AnchorPane) loader.load();
             Stage stage=new Stage();
             stage.setTitle("Edit Person");
@@ -147,11 +158,12 @@ public class Main extends Application {
     public void login(){
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("../../login.fxml"));
+            loader.setLocation(getClass().getClassLoader().getResource("login.fxml"));
+//            loader.setLocation(Main.class.getResource("../../login.fxml"));
             GridPane pane = (GridPane) loader.load();
 
-            primaryStage.setTitle("Hello World");
-            Scene scene = new Scene(pane, 800, 600);
+            primaryStage.setTitle("Login");
+            Scene scene = new Scene(pane, 400, 300);
             primaryStage.setScene(scene);
             //加载背景图片
             scene.getStylesheets().add(getClass().getClassLoader().getResource("Login.css").toExternalForm());

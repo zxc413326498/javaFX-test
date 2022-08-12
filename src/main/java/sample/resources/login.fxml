@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<?import java.net.URL?>
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.control.LoginController" >
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.control.LoginController">
    <columnConstraints>
       <ColumnConstraints />
       <ColumnConstraints />
@@ -19,12 +20,20 @@
       <RowConstraints />
       <RowConstraints />
    </rowConstraints>
-   <Pane prefHeight="200.0" prefWidth="600.0" >
+   <Pane prefHeight="200.0" prefWidth="400.0">
       <children>
-         <Button layoutX="273.0" layoutY="140.0" mnemonicParsing="false" onAction="#login" text="登录" />
-         <PasswordField id="password" fx:id="password" layoutX="220.0" layoutY="100.0" promptText="密码" />
-         <TextField id="username" fx:id="username" layoutX="220.0" layoutY="44.0" promptText="账号名" />
-         <Text fx:id="loginmessage" layoutX="328.0" layoutY="156.0" strokeType="OUTSIDE" strokeWidth="0.0" />
+         <HBox layoutX="180.0" layoutY="140.0" spacing="10.0">
+            <children>
+               <Button mnemonicParsing="false" onAction="#login" text="登录" />
+               <Text fx:id="loginmessage" strokeType="OUTSIDE" strokeWidth="0.0">
+                  <HBox.margin>
+                     <Insets />
+                  </HBox.margin>
+               </Text>
+            </children>
+         </HBox>
+         <PasswordField id="password" fx:id="password" layoutX="120.0" layoutY="100.0" promptText="密码" />
+         <TextField id="username" fx:id="username" layoutX="120.0" layoutY="46.0" promptText="账号名" />
       </children>
    </Pane>
 
