@@ -16,10 +16,19 @@ import org.controlsfx.dialog.ExceptionDialog;
 import sample.control.LoginController;
 import sample.control.PersonEditDialogController;
 import sample.control.PersonOverviewController;
+import sample.control.RootLayoutController;
 import sample.model.Person;
+import sample.model.PersonListWrapper;
+import sample.util.DialogUtil;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.util.prefs.Preferences;
 
 public class Main extends Application {
 
@@ -88,8 +97,17 @@ public class Main extends Application {
             Scene scene = new Scene(rootLayout);
             primaryStage.setScene(scene);
             primaryStage.show();
+            // 连接根布局control
+            RootLayoutController rootLayoutController=loader.getController();
+            rootLayoutController.setMain(this);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        // Try to load last opened person file.
+        File file = getPersonFilePath();
+        if (file != null) {
+            loadPersonDataFromFile(file);
         }
     }
 
@@ -171,9 +189,114 @@ public class Main extends Application {
             //加载control类，传递main对象
             LoginController controller = loader.getController();
             controller.setMain(this);
+
+            getLoginName(controller);
         }catch (IOException e){
             ExceptionDialog exceptionDialog = new ExceptionDialog(e);
             exceptionDialog.show();
+        }
+    }
+    /**
+     * 获取存储的用户名
+     * Error：Could not open/create prefs root node Software\JavaSoft\Prefs at root 0x80000002. Windows RegCreateKeyEx(...) returned error code 5.
+     */
+    public void getLoginName(LoginController controller){
+        Preferences preferences=Preferences.userNodeForPackage(Main.class);
+        String username=preferences.get("username",null);
+        controller.setUsername(username);
+    }
+    /**
+     * 存储用户名
+     */
+    public void setLoginName(String name){
+        Preferences preferences=Preferences.userNodeForPackage(Main.class);
+        preferences.put("username",name);
+    }
+
+    /**
+     * Returns the person file preference, i.e. the file that was last opened.
+     * The preference is read from the OS specific registry. If no such
+     * preference can be found, null is returned.
+     *
+     * @return
+     */
+    public File getPersonFilePath(){
+        Preferences preferences=Preferences.userNodeForPackage(Main.class);
+        String filePath=preferences.get("filePath",null);
+        if(filePath!=null){
+            return new File(filePath);
+        }else {
+            return null;
+        }
+    }
+    /**
+     * Sets the file path of the currently loaded file. The path is persisted in
+     * the OS specific registry.
+     *
+     * @param file the file or null to remove the path
+     */
+    public void setPersonFilePath(File file){
+        Preferences preferences=Preferences.userNodeForPackage(Main.class);
+        if(file!=null){
+            preferences.put("filePath", file.getPath());
+
+            //update the stage title
+            primaryStage.setTitle("AddressApp -"+file.getName());
+        }else {
+            preferences.remove("filePath");
+
+            //update the stage title
+            primaryStage.setTitle("AddressAppp");
+        }
+    }
+    /**
+     * Loads person data from the specified file. The current person data will
+     * be replaced.
+     *
+     * @param file
+     */
+    public void loadPersonDataFromFile(File file){
+        try{
+            JAXBContext context=JAXBContext.newInstance(PersonListWrapper.class);
+            Unmarshaller um=context.createUnmarshaller();
+
+            // Reading XML from the file and unmarshalling.
+            PersonListWrapper wrapper=(PersonListWrapper) um.unmarshal(file);
+
+            personData.clear();
+            personData.addAll(wrapper.getPersons());
+
+            // Save the file path to the registry.
+            setPersonFilePath(file);
+        }catch (Exception e){
+            DialogUtil.showDialogMessage("Error",
+                    "Could not load data from file:\n" + file.getPath(),
+                    e.getMessage());
+        }
+    }
+    /**
+     * Saves the current person data to the specified file.
+     *
+     * @param file
+     */
+    public void savePersonDataToFile(File file){
+        try{
+            JAXBContext context=JAXBContext.newInstance(PersonListWrapper.class);
+            Marshaller marshaller=context.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,true);
+
+            // Wrapping our person data.
+            PersonListWrapper wrapper=new PersonListWrapper();
+            wrapper.setPersons(personData);
+            // Marshalling and saving XML to the file.
+            marshaller.marshal(wrapper,file);
+
+            // Save the file path to the registry.
+            setPersonFilePath(file);
+        }catch (Exception e){
+            DialogUtil.showDialogMessage("Error",
+                    "Could not save data from file:\n" + file.getPath(),
+                    e.getMessage());
         }
     }
 
