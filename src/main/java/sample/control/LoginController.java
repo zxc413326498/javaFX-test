@@ -44,6 +44,8 @@ public class LoginController {
         if(usernameString.equals("root")&&passwordString.equals("root")) {
             main.initRootLayout();
             main.showPersonOverview();
+            //登录成功，存储用户名到pref
+            main.setLoginName(usernameString);
         }else {
             showDialogMessage("提示","警告！","账号或密码错误");
         }
@@ -51,5 +53,9 @@ public class LoginController {
 
     public void setMain(Main main) {
         this.main=main;
+    }
+
+    public void setUsername(String name){
+        username.setText(name);
     }
 }
