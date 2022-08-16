@@ -13,10 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.controlsfx.dialog.ExceptionDialog;
-import sample.control.LoginController;
-import sample.control.PersonEditDialogController;
-import sample.control.PersonOverviewController;
-import sample.control.RootLayoutController;
+import sample.control.*;
 import sample.model.Person;
 import sample.model.PersonListWrapper;
 import sample.util.DialogUtil;
@@ -296,6 +293,34 @@ public class Main extends Application {
         }catch (Exception e){
             DialogUtil.showDialogMessage("Error",
                     "Could not save data from file:\n" + file.getPath(),
+                    e.getMessage());
+        }
+    }
+
+    /**
+     * Opens a dialog to show birthday statistics.
+     */
+    public void showBirthdayStatistics(){
+        try {
+            // Load the fxml file and create a new stage for the popup.
+            FXMLLoader loader=new FXMLLoader();
+            loader.setLocation(getClass().getClassLoader().getResource("BirthdayStatistics.fxml"));
+            AnchorPane pane=(AnchorPane)loader.load();
+            Stage stage=new Stage();
+            stage.setTitle("Birthday Statistics");
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(primaryStage);
+            Scene scene=new Scene(pane);
+            stage.setScene(scene);
+
+            // Set the persons into the controller.
+            BirthdayStatisticsController controller=loader.getController();
+            controller.setPersonData(personData);
+            stage.show();
+        }catch (IOException e){
+            e.printStackTrace();
+            DialogUtil.showDialogMessage("Error",
+                    "BirthdayStatistics Error",
                     e.getMessage());
         }
     }
