@@ -72,7 +72,7 @@ public class Main extends Application {
         try {
             // Load root layout from fxml file.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("../../RootLayout.fxml"));
+            loader.setLocation(getClass().getClassLoader().getResource("RootLayout.fxml"));
             rootLayout = (BorderPane) loader.load();
 
             // Show the scene containing the root layout.
@@ -91,7 +91,7 @@ public class Main extends Application {
         try {
             // Load person overview.
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("../../PersonOverview.fxml"));
+            loader.setLocation(getClass().getClassLoader().getResource("PersonOverview.fxml"));
             AnchorPane personOverview = (AnchorPane) loader.load();
 
             // Set person overview into the center of root layout.
@@ -117,7 +117,7 @@ public class Main extends Application {
         try{
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader=new FXMLLoader();
-            loader.setLocation(Main.class.getResource("../../PersonEditDialog.fxml"));
+            loader.setLocation(getClass().getClassLoader().getResource("PersonEditDialog.fxml"));
             AnchorPane pane=(AnchorPane) loader.load();
             Stage stage=new Stage();
             stage.setTitle("Edit Person");
@@ -147,7 +147,7 @@ public class Main extends Application {
     public void login(){
         try {
             FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(Main.class.getResource("../../login.fxml"));
+            loader.setLocation(getClass().getClassLoader().getResource("login.fxml"));
             GridPane pane = (GridPane) loader.load();
 
             primaryStage.setTitle("Hello World");
