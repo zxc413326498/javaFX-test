@@ -7,6 +7,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import sample.app.Main;
+import sample.dao.UserDao;
 
 import static sample.util.DialogUtil.showDialog;
 import static sample.util.DialogUtil.showDialogMessage;
@@ -41,7 +42,9 @@ public class LoginController {
 
         loginmessage.setText("正在登录，请稍后");
         //正在登录中，进行登录验证和跳转操作
-        if(usernameString.equals("root")&&passwordString.equals("root")) {
+        UserDao userDao=new UserDao();
+        if(userDao.userLogin(usernameString,passwordString)){
+//        if(usernameString.equals("root")&&passwordString.equals("root")) {
             main.initRootLayout();
             main.showPersonOverview();
             //登录成功，存储用户名到pref
